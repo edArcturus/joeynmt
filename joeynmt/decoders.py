@@ -528,7 +528,8 @@ class TransformerDecoder(Decoder):
 
         x = self.pe(trg_embed)  # add position encoding to word embedding
         x = self.emb_dropout(x)
-
+        x = self.layer_norm(x)
+        
         trg_mask = trg_mask & subsequent_mask(
             trg_embed.size(1)).type_as(trg_mask)
 
@@ -536,7 +537,7 @@ class TransformerDecoder(Decoder):
             x = layer(x=x, memory=encoder_output,
                       src_mask=src_mask, trg_mask=trg_mask)
 
-        x = self.layer_norm(x)
+        
         output = self.output_layer(x)
 
         return output, x, None, None

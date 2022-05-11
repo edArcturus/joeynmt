@@ -112,7 +112,7 @@ class PositionwiseFeedForward(nn.Module):
 
     def forward(self, x):
         pwff_x = self.pwff_layer(x)
-        return self.layer_norm(pwff_norm) + x
+        return self.layer_norm(pwff_x) + x
 
 
 # pylint: disable=arguments-differ
@@ -261,8 +261,8 @@ class TransformerDecoderLayer(nn.Module):
         # decoder/target self-attention
         # x_norm = self.x_layer_norm(x)
         h1 = self.trg_trg_att(x, x, x, mask=trg_mask)
-        h1 = self.layer_norm(h1)
-        h1 = self.layer_norm(self.dropout(h1) + x)
+        h1 = self.x_layer_norm(h1)
+        h1 = self.x_layer_norm(self.dropout(h1) + x)
 
         # source-target attention
         # h1_norm = self.dec_layer_norm(h1)
